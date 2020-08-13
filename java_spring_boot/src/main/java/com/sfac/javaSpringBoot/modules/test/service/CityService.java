@@ -21,6 +21,6 @@ public interface CityService {
     //更新数据
     Result<City> updateCity(City city);
 
-    //删除数据
+    //删除数据，删除以后都没有了所以返回object对象
     Result<Object> deleteCity(int cityId);
 }

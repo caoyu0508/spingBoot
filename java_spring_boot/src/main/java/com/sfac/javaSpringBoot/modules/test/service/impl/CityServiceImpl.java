@@ -55,12 +55,14 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @Transactional
     public Result<City> updateCity(City city) {
         cityDao.updateCity(city);
         return new Result<>(Result.ResultStatus.SUCCESS.status,"Update success",city);
     }
 
     @Override
+    @Transactional
     public Result<Object> deleteCity(int cityId) {
         cityDao.deleteCity(cityId);
         return new Result<Object>(Result.ResultStatus.SUCCESS.status,

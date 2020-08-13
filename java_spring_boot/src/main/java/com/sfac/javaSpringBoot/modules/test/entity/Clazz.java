@@ -29,6 +29,7 @@ public class Clazz {
      */
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", insertable = false, updatable = false)
+
     @JsonIgnore
     private School school;
 

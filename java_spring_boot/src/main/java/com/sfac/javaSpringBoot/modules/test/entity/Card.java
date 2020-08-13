@@ -17,7 +17,6 @@ public class Card {
     private int cardId;
     @Column(name = "card_no", length = 33, unique = true)
     private String cardNo;
-
     /**
      * OneToOne：一对一关系中，一方使用 JoinColumn 注解（有外键），另一方使用 mappedBy 属性（可选）
      * cascade：联级操作

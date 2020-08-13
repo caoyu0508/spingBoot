@@ -59,6 +59,7 @@ public class CityController {
      * 127.0.0.1/api/city ---- put
      * "cityId"="2259",cityName"="aaaaa"
      * 根据城市的id更新城市的名字
+     * ModelAttribute：用来接收表单的数据
      */
     @PutMapping(value = "/city",consumes = "application/x-www-form-urlencoded")
     public Result<City> updateCity(@ModelAttribute City city){
