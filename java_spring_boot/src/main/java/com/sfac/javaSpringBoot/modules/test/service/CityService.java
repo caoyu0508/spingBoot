@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.javaSpringBoot.modules.common.vo.Result;
 import com.sfac.javaSpringBoot.modules.common.vo.SearchVo;
 import com.sfac.javaSpringBoot.modules.test.entity.City;
+import com.sfac.javaSpringBoot.modules.test.entity.Country;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface CityService {
 
     //删除数据，删除以后都没有了所以返回object对象
     Result<Object> deleteCity(int cityId);
+
+
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager System</title>
+    <!--    引入js-->
+    <script th:src="${'/js/jquery.min.js'}" type="text/javascript"></script>
+
+    <!-- 关于弹出层的js layer -->
+    <script th:src="@{https://cdn.bootcss.com/layer/2.1/layer.js}"
+            type="text/javascript"></script>
+</head>
+<body>
+<!-- 引入碎片文件 header.html-->
+<div th:replace="fragments/header"></div>
+
+<!-- 引入碎片文件 sidebar.html-->
+<div th:replace="fragments/sidebar"></div>
+<div th:if="${template}">
+    <div th:replace="${template}"></div>
+</div>
+<!-- 引入碎片文件 footer.html的指定footer部分定位的方法-->
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

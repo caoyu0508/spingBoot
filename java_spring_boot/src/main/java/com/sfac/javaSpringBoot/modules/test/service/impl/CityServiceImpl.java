@@ -6,9 +6,12 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.javaSpringBoot.modules.common.vo.Result;
 import com.sfac.javaSpringBoot.modules.common.vo.SearchVo;
 import com.sfac.javaSpringBoot.modules.test.dao.CityDao;
+import com.sfac.javaSpringBoot.modules.test.dao.CountryDao;
 import com.sfac.javaSpringBoot.modules.test.entity.City;
+import com.sfac.javaSpringBoot.modules.test.entity.Country;
 import com.sfac.javaSpringBoot.modules.test.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
 public class CityServiceImpl implements CityService {
     @Autowired
     private CityDao cityDao;
+
     @Override
     public List<City> getcitiesByCountryId(int countryId) {
         return Optional.ofNullable(cityDao.getcitiesByCountryId(countryId))
@@ -55,9 +59,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    @Transactional
+    //事务设置，当遇到算数异常的时候不发生回滚，继续运行
+    @Transactional(noRollbackFor = ArithmeticException.class)
     public Result<City> updateCity(City city) {
         cityDao.updateCity(city);
+        int i=1/0;
         return new Result<>(Result.ResultStatus.SUCCESS.status,"Update success",city);
     }
 
@@ -68,4 +74,6 @@ public class CityServiceImpl implements CityService {
         return new Result<Object>(Result.ResultStatus.SUCCESS.status,
                 "Delete success");
     }
+
+
 }
