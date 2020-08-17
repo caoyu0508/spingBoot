@@ -18,9 +18,11 @@
 
 <!-- 引入碎片文件 sidebar.html-->
 <div th:replace="fragments/sidebar"></div>
+
 <div th:if="${template}">
     <div th:replace="${template}"></div>
 </div>
+
 <!-- 引入碎片文件 footer.html的指定footer部分定位的方法-->
 <div th:replace="fragments/footer::footer"></div>
 </body>

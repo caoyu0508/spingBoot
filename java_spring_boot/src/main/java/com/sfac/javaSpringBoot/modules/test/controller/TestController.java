@@ -13,8 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,11 +69,6 @@ public class TestController {
         return sb.toString();
     }
 
-    @GetMapping("/testDesc")
-    @ResponseBody
-    public String testDesc() {
-        return "This is test module desc.";
-    }
 
     /**
      * 127.0.0.1/test/index
@@ -97,18 +94,29 @@ public class TestController {
         modelMap.addAttribute("country", country);
         modelMap.addAttribute("cities", cities);
         modelMap.addAttribute("updateCityUri", "/api/city");
-        modelMap.addAttribute("template","test/index");
+//        modelMap.addAttribute("template","test/index");
         return "index";
     }
 
     /**
-     * 127.0.0.1/test/index2
+     * 127.0.0.1/test/testDesc?paramKey=fuck ---- get
      * @return
      */
     @GetMapping("/index2")
     public String testIndex2Page(ModelMap modelMap){
         modelMap.addAttribute("template","test/index2");
         return "index";
+    }
+
+    /**
+     * 127.0.0.1/test/testDesc?paramKey=fuck ---- get
+     */
+    @GetMapping("/testDesc")
+    @ResponseBody
+    public String testDesc(HttpServletRequest request,
+                           @RequestParam("paramKey") String paramValue){
+        String paramValue2=request.getParameter("paramKey");
+        return "This is test module desc." + paramValue + "==" + paramValue2;
     }
 }
 
