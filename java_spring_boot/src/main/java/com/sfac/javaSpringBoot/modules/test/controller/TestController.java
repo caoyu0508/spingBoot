@@ -9,14 +9,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,6 +123,83 @@ public class TestController {
                            @RequestParam("paramKey") String paramValue){
         String paramValue2=request.getParameter("paramKey");
         return "This is test module desc." + paramValue + "==" + paramValue2;
+    }
+
+    /**
+     *127.0.0.1/test/file ---- post
+     */
+    @PostMapping(value = "/file",consumes = "multipart/form-data")
+    public String uploadFile(@RequestParam MultipartFile file,
+                             RedirectAttributes redirectAttributes){
+        //考虑文件是否为空
+        if (file.isEmpty()){
+            redirectAttributes.addFlashAttribute("message","please select file.");
+            return "redirect:/test/index";
+        }
+        try {
+            //file.getOriginalFilename得到文件的名字
+            String destFilePath="D:\\img\\"+file.getOriginalFilename();
+            //创建一个文件，参数为创建的地址
+            File destFile=new File(destFilePath);
+            //把文件迁移到哪里去
+            file.transferTo(destFile);
+            //设置传递参数如果成功显示信息并刷新
+            redirectAttributes.addFlashAttribute("message","uplaod file success");
+        } catch (IOException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("message","uplaod file failed.");
+        }
+        return "redirect:/test/index";
+    }
+
+    /**
+     *
+     * 127.0.0.1/test/files ---- post
+     *
+     */
+    @PostMapping(value = "/files",consumes = "multipart/form-data")
+    public String uploadFiles(@RequestParam MultipartFile[] files,
+                              RedirectAttributes redirectAttributes){
+        boolean empty=true;
+        try {
+            for (MultipartFile file : files) {
+                if (file.isEmpty()){
+                    continue;
+                }
+                //file.getOriginalFilename得到文件的名字
+                String destFilePath="D:\\img\\"+file.getOriginalFilename();
+                //创建一个文件，参数为创建的地址
+                File destFile=new File(destFilePath);
+                //把文件迁移到哪里去
+                file.transferTo(destFile);
+                empty=false;
+            }
+            if (empty){
+                redirectAttributes.addFlashAttribute("message","please select file.");
+            }else {
+                redirectAttributes.addFlashAttribute("message","uplaod file success");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("message","uplaod file failed.");
+        }
+        return "redirect:/test/index";
+    }
+
+    @GetMapping(value = "/downloadFile")
+    public ResponseEntity downloadFile(@RequestParam("fileName") String fileName){
+        try {
+            Resource resource=new UrlResource(Paths.get("D:\\img\\"+fileName).toUri());
+            //设置编码格式，否则会乱码
+            String downName=new String(resource.getFilename().getBytes("utf-8"),"ISO8859-1");
+            return ResponseEntity.ok().header("Content-Type","application/octet-stream")
+                    .header(HttpHeaders.CONTENT_DISPOSITION,String.format("attachment; filename=\"%s\"",resource.getFilename()))
+                    .body(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

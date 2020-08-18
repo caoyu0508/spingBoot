@@ -1,17 +1,37 @@
+<h3>file upload and downlod</h3>
+<a href="/test/downloadFile?fileName=timg.jpg">download file</a>
+
+<br>
+
+<!--上传一个文件-->
+<p th:text="${message}"></p>
+<p>上传文件，使用multipart/form-data类型</p>
+<form action="/test/file" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button type="submit">上传</button>
+</form>
+<br>
+
+<!--上传多个文件-->
+<form action="/test/files" method="post" enctype="multipart/form-data">
+    <input type="file" name="files">
+    <input type="file" name="files">
+    <button type="submit">上传</button>
+</form>
+<p>==================================================================</p>
+
 <h3>th:text</h3>
 <h1 th:text="${thymeleafTitle}">this is thymeleaf title</h1>
 <p th:text="${thymeleafTitle}">this is the thymeleaf ti-tle</p>
 <p>==================================================================</p>
 
-<!--设置里面的值，根据if判断语句来进行相关的判断-->
 <h3>th:if,th:unless.</h3>
 <p th:if="${checked} == true">If true, this will display</p>
 <p th:unless="${checked} == false">If not false, this will display</p>
-<p th:if="${currentNumber}&lt;85">print if the currentNumber &lt;85</p>
+<p th:if="${currentNumber}&lt;100">print if the currentNumber &lt;100</p>
 <p th:if="${thymeleafTitle} == null">name is null</p>
 <p>==================================================================</p>
 
-<!--属性的设置-->
 <h3>th:attr</h3>
 checkbox:<input type="text" th:attr="type=${changeType}" th:checked="${checked}"/>
 <p>==================================================================</p>
@@ -47,7 +67,6 @@ checkbox:<input type="text" th:attr="type=${changeType}" th:checked="${checked}"
             th:value="${city.cityId}" th:text="${city.cityName}"></option>
 </select>
 <p>==================================================================</p>
-
 
 <h3>post form, th:action, th:object, th:field</h3>
 <!-- 我们可以指定是GET还是POST请求,这里需要注意的是有的浏览器并不支持PUT请求,SpringMVC为我们提供了一种解决方案,添加hidden指定method -->

@@ -8,10 +8,12 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
+
 @WebFilter(filterName = "requestParamaFilter",urlPatterns ="/**" )
 public class RequestParamaFilter implements Filter {
     //创建日志实例
     private final static Logger LOGGER= LoggerFactory.getLogger(RequestParamaFilter.class);
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         LOGGER.debug("==========init request param filter==============");
