@@ -58,6 +58,15 @@ public class TestController {
 //引入注册的文件进行注册
     @Autowired
     private ApplicationTest applicationTest;
+
+    /**
+     * 127.0.0.1/test/indexSimple ---- get
+     */
+    @GetMapping("/indexSimple")
+    public String indexSimpleTestPage() {
+        return "indexSimple";
+    }
+
     @GetMapping("/config")
     @ResponseBody
     public String configTest() {
@@ -201,5 +210,7 @@ public class TestController {
         }
         return null;
     }
+
+
 }
 
