@@ -1,4 +1,4 @@
-package com.sfac.javaSpringBoot.modules.account;
+package com.sfac.javaSpringBoot.modules.account.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,5 +13,23 @@ public class AccountController {
     @GetMapping("/users")
     public String usersPage(){
         return "index";
+    }
+
+    /**
+     * 127.0.0.1/account/login------get
+     */
+    @GetMapping("/login")
+    public String loginPage(){
+
+        return "indexSimple";
+    }
+
+    /**
+     * 127.0.0.1/account/register------get
+     */
+    @GetMapping("/register")
+    public String registerPage(){
+
+        return "indexSimple";
     }
 }

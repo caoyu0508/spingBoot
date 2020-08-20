@@ -23,6 +23,7 @@ public class RequestViewInterceptor implements HandlerInterceptor {
         if (modelAndView==null||modelAndView.getViewName().startsWith("redirect")){
             return;
         }
+        //得到浏览器中输入的地址
         String path=request.getServletPath();
         String template= (String) modelAndView.getModelMap().get("template");
         if (StringUtils.isBlank(template)){
