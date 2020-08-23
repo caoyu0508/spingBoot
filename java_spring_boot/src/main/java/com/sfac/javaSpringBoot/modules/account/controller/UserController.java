@@ -7,10 +7,7 @@ import com.sfac.javaSpringBoot.modules.common.vo.Result;
 import com.sfac.javaSpringBoot.modules.common.vo.SearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.sfac.javaSpringBoot.modules.account.entity.User;
 
 import java.util.List;
@@ -47,4 +44,32 @@ public class UserController {
     public PageInfo<User> getUsersBySearchVo(SearchVo searchVo){
         return userServcie.getUsersBySearchVo(searchVo);
     }
+
+    /**
+     * 127.0.0.1/api/user--------put
+     * {"userName":"hujiang1","userImg":"/aaa.jpg","userId":"4"}
+     */
+    @PutMapping(value = "/user",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Result<User> updateUser(@RequestBody User user){
+        return userServcie.updateUser(user);
+    }
+
+
+    /**
+     * 127.0.0.1/api/user/1
+     */
+    @DeleteMapping("/user/{userId}")
+    public Result<Object> deleteUser(@PathVariable int userId){
+        return userServcie.deleteUser(userId);
+    }
+
+
+    /**
+     * 127.0.0.1/api/user/1---get
+     */
+    @GetMapping("/user/{userId}")
+    public User getUserByUserId(@PathVariable int userId){
+        return userServcie.getUserByUserId(userId);
+    }
+
 }
