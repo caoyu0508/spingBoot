@@ -43,7 +43,7 @@ public class AccountController {
     }
 
     /**
-     * 127.0.0.1/account/roles------get
+     * 127.0.0.1/account/resources------get
      */
     @GetMapping("/resources")
     public String resourcesPage(){
@@ -51,4 +51,21 @@ public class AccountController {
         return "index";
     }
 
+    /**
+     * 127.0.0.1/account/profile------get
+     */
+    @GetMapping("/profile")
+    public String profilePage(){
+
+        return "index";
+    }
+
+    /**
+     * 127.0.0.1/account/registerVue------get
+     */
+    @GetMapping("/registerVue")
+    public String registerVuePage(){
+
+        return "indexSimple";
+    }
 }

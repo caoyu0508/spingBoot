@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import com.sfac.javaSpringBoot.modules.account.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -70,6 +71,14 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public User getUserByUserId(@PathVariable int userId){
         return userServcie.getUserByUserId(userId);
+    }
+
+    /**
+     * 127.0.0.1/api/userImg ---- post
+     */
+    @PostMapping(value = "/userImg", consumes = "multipart/form-data")
+    public Result<String> uploadFile(@RequestParam MultipartFile file) {
+        return userServcie.uploadUserImg(file);
     }
 
 }

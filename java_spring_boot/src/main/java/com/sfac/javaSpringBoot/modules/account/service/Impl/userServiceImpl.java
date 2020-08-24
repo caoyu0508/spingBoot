@@ -2,6 +2,7 @@ package com.sfac.javaSpringBoot.modules.account.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sfac.javaSpringBoot.config.ResourceConfigBean;
 import com.sfac.javaSpringBoot.modules.account.dao.UserDao;
 import com.sfac.javaSpringBoot.modules.account.dao.UserRoleDao;
 import com.sfac.javaSpringBoot.modules.account.entity.Role;
@@ -14,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.From;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +32,9 @@ public class userServiceImpl implements userServcie {
 
     @Autowired
     private UserRoleDao userRoleDao;
+
+    @Autowired
+    private ResourceConfigBean resourceConfigBean;
 
     @Override
     @Transactional
@@ -127,4 +134,38 @@ public class userServiceImpl implements userServcie {
     public User getUserByUserId(int userId) {
         return userDao.getUserByUserId(userId);
     }
+
+    @Override
+    public Result<String> uploadUserImg(MultipartFile file) {
+        if (file.isEmpty()) {
+            return new Result<String>(
+                    Result.ResultStatus.fAILD.status, "Please select img.");
+        }
+
+        String relativePath = "";
+        String destFilePath = "";
+        try {
+            String osName = System.getProperty("os.name");
+            if (osName.toLowerCase().startsWith("win")) {
+                destFilePath = resourceConfigBean.getLocationPathForWindows() +
+                        file.getOriginalFilename();
+            } else {
+                destFilePath = resourceConfigBean.getLocationPathForLinux()
+                        + file.getOriginalFilename();
+            }
+            relativePath = resourceConfigBean.getRelativePath() +
+                    file.getOriginalFilename();
+            File destFile = new File(destFilePath);
+            file.transferTo(destFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Result<String>(
+                    Result.ResultStatus.fAILD.status, "Upload failed.");
+        }
+
+        return new Result<String>(
+                Result.ResultStatus.SUCCESS.status, "Upload success.", relativePath);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.javaSpringBoot.modules.account.entity.User;
 import com.sfac.javaSpringBoot.modules.common.vo.Result;
 import com.sfac.javaSpringBoot.modules.common.vo.SearchVo;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface userServcie {
 
@@ -20,4 +21,6 @@ public interface userServcie {
 
     //查询
     User getUserByUserId(int userId);
+
+    Result<String> uploadUserImg(MultipartFile file);
 }
