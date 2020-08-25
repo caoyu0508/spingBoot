@@ -11,13 +11,15 @@ import com.sfac.javaSpringBoot.modules.account.service.userServcie;
 import com.sfac.javaSpringBoot.modules.common.vo.Result;
 import com.sfac.javaSpringBoot.modules.common.vo.SearchVo;
 import com.sfac.javaSpringBoot.utils.MD5Util;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.criteria.From;
+import org.apache.shiro.subject.Subject;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -76,16 +78,32 @@ public class userServiceImpl implements userServcie {
     }
 
     @Override
-    @Transactional
     public Result<User> login(User user) {
-        User userTemp = userDao.getUserByUserName(user.getUserName());
-        if (userTemp!=null&& userTemp.getPassword().equals(MD5Util.getMD5(user.getPassword()))){
-            return new Result<>(Result.ResultStatus.SUCCESS.status,"success",userTemp);
-        }
-        return new Result<User>(Result.ResultStatus.fAILD.status,
-                "UserName or password is error.");
-    }
 
+        Subject subject = SecurityUtils.getSubject();
+        //包装令牌
+        UsernamePasswordToken usernamePasswordToken =
+                new UsernamePasswordToken(user.getUserName(),
+                        MD5Util.getMD5(user.getPassword()));
+        usernamePasswordToken.setRememberMe(user.getRememberMe());
+
+        try {
+            //调用realm，包装身份验证器，最后两种作对比
+            subject.login(usernamePasswordToken);
+            subject.checkRoles();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<User>(Result.ResultStatus.fAILD.status,
+                    "UserName or password is error.");
+        }
+
+        Session session = subject.getSession();
+        session.setAttribute("user", (User)subject.getPrincipal());
+
+        return new Result<User>(Result.ResultStatus.SUCCESS.status,
+                "Login success.", user);
+
+    }
 
     @Override
     @Transactional
@@ -166,6 +184,20 @@ public class userServiceImpl implements userServcie {
 
         return new Result<String>(
                 Result.ResultStatus.SUCCESS.status, "Upload success.", relativePath);
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userDao.getUserByUserName(userName);
+    }
+
+    @Override
+    public void logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        Session session = subject.getSession();
+        //清除session的信息
+        session.setAttribute("user", null);
     }
 
 }

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sfac.javaSpringBoot.modules.account.service.userServcie;
 import com.sfac.javaSpringBoot.modules.common.vo.Result;
 import com.sfac.javaSpringBoot.modules.common.vo.SearchVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,7 @@ public class UserController {
      * 127.0.0.1/api/user/1
      */
     @DeleteMapping("/user/{userId}")
+    @RequiresPermissions(value = "/api/user")
     public Result<Object> deleteUser(@PathVariable int userId){
         return userServcie.deleteUser(userId);
     }
@@ -79,6 +81,14 @@ public class UserController {
     @PostMapping(value = "/userImg", consumes = "multipart/form-data")
     public Result<String> uploadFile(@RequestParam MultipartFile file) {
         return userServcie.uploadUserImg(file);
+    }
+
+    /**
+     * 127.0.0.1/api/logout
+     */
+    @GetMapping("/logout")
+    public void logout(){
+        userServcie.logout();
     }
 
 }
