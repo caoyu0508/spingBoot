@@ -88,8 +88,9 @@ public class userServiceImpl implements userServcie {
         usernamePasswordToken.setRememberMe(user.getRememberMe());
 
         try {
-            //调用realm，包装身份验证器，最后两种作对比
+            //调用realm，包装身份验证器最后两种作对比
             subject.login(usernamePasswordToken);
+            //资源授权
             subject.checkRoles();
         } catch (Exception e) {
             e.printStackTrace();

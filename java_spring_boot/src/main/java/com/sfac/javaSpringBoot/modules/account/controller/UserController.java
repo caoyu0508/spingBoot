@@ -43,7 +43,7 @@ public class UserController {
      * {"currentPage":"1","pageSize":"5","keyWord":"hu"}
      */
     @PostMapping(value = "/users",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PageInfo<User> getUsersBySearchVo(SearchVo searchVo){
+    public PageInfo<User> getUsersBySearchVo(@RequestBody  SearchVo searchVo){
         return userServcie.getUsersBySearchVo(searchVo);
     }
 
@@ -83,12 +83,5 @@ public class UserController {
         return userServcie.uploadUserImg(file);
     }
 
-    /**
-     * 127.0.0.1/api/logout
-     */
-    @GetMapping("/logout")
-    public void logout(){
-        userServcie.logout();
-    }
 
 }

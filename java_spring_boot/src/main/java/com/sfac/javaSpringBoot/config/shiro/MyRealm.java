@@ -29,12 +29,13 @@ public class MyRealm  extends AuthorizingRealm {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //得到登录的用户信息
         User user = (User) principals.getPrimaryPrincipal();
+        //根据用户信息查找角色
         List<Role> roles = user.getRoles();
         if (roles != null && !roles.isEmpty()) {
             roles.stream().forEach(item -> {
                 //AuthorizationInfo接口的实现类里面的方法，这里装好了角色信息
                 simpleAuthorizationInfo.addRole(item.getRoleName());
-                //根据角色查资源
+                //根据角色查资源，然后放到资源授权器中
                 List<Resource> resources =
                         resourceService.getResourcesByRoleId(item.getRoleId());
                 if (resources != null && !resources.isEmpty()) {
@@ -45,7 +46,7 @@ public class MyRealm  extends AuthorizingRealm {
                 }
             });
         }
-
+        //返回资源授权器
         return simpleAuthorizationInfo;
     }
 

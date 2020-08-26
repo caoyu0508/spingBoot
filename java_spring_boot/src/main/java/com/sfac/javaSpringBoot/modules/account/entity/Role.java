@@ -1,5 +1,6 @@
 package com.sfac.javaSpringBoot.modules.account.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -11,13 +12,11 @@ import javax.persistence.Transient;
 
 /**
  * 角色类
- * @author: HymanHu
- * @date: 2019年11月28日
  */
 @Entity
 @Table(name = "role")
-public class Role {
 
+public class Role implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int roleId;
