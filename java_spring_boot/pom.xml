@@ -59,10 +59,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
         <!--  common   在studentServiceImpl中的StringUtil.isEmpty().isbank()处使用-->
         <dependency>
             <groupId>org.apache.commons</groupId>
