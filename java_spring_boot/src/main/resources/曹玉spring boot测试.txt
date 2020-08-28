@@ -1,0 +1,114 @@
+一、选择题（共12小题，每小题2.5分，共30分）
+	以下不是spring boot优点的是 ( D )
+		A．快速搭建项目
+		B．简化配置  
+		C．自动配置  
+		D．无需容器
+	Spring Boot配置，以下哪个优先级最高（ A）
+		A、外置：xx.jar同目录下/config/application.properties；
+		B、外置：xx.jar同目录下/config/application.yml；
+		C、内置：src/main/resources/config；
+		D、内置：src/main/resources
+	以下log日志级别哪个最高（D）
+		A、DEBUG
+		B、INFO
+		C、WARN
+		D、ERROR
+	以下不是spring boot的核心注解的是 ( D )
+		A.	@SpringBootConfiguration
+		B.	@EnableAutoConfiguration
+		C.	@ComponentScan
+		D.	@MapperScan
+	要使用springMVC的功能，需要导入那个包 ( C)
+		A．spring-boot-starter-jdbc  
+		B．spring-boot-starter-thymeleaf  
+		C．spring-boot-starter-web  
+		D．mybatis-spring-boot-starter
+	以下哪个注解不能加在类上 ( B )
+		A.	@Controller
+		B.	@ResponseBody
+		C.	@RestController
+		D.	@RequestMapping
+	当控制层上有@RestController注解时，方法中返回一个字符串“<h1>Hello</h1>”，浏览器调用的结果是 ( B )
+		A. 一级标题显示的Hello
+		B.	找不到Hello.html
+		C.	<h1>Hello</>
+		D.	Hello
+	SpringBoot项目中配置文件的格式 (  C )
+		A．properties  
+		B．yml  
+		C．两者都可以
+	不是SpringBoot核心配置文件是（C）
+		A.	bootstrap
+		B.	application
+		C.	application-dev
+	前台使用json参数格式，控制器consumer、参数使用的注解是（A）
+		A、application/josn ---- @RequestBody
+		B、application/josn ---- @ModelAttribute
+		C、application/x-www-form-urlencoded ---- @RequestBody
+		D、application/x-www-form-urlencoded ---- @ModelAttribute
+	@Pointcut("execution(public * com.thornBird.sbd.modules.*.controller.*.*(..))")，第三个*代表（C）
+		A、代表返回类型不限
+		B、代表module下所有子包
+		C、代表所有类
+		D、代表所有方法
+	Url匹配风格中/admin*，以下哪个匹配不正确（D）
+		A、/admin
+		B、/admin1
+		C、/admin123
+		D、/admin/1
+	Mybatis框架中，插入数据使用那个注解（B）
+		A、@Update
+		B、@Insert
+		C、@Select
+		D、@InsertMapping
+
+二、填空题（共5小题，每小题5分，共25分）
+	获取配置文件的属性值，使用哪个注解_@Value_______________；
+	Java配置依赖的2个注解是__@Bean________，__@Configuration________;
+	Spring Boot修改tomcat端口号为9090应该怎么写？_在application.properties里设置server.port=9090___________;
+	自定义拦截器需要实现___Interceptor_____接口；
+	过滤器需要使用__@filter_______注解;
+	上传文件，使用__MultipartFile file__接收文件对象，consumer使用_multipart/form-data____;
+
+三、问答题（每题5分，共25分）
+	阐述 Spring Boot 特性，举一个例子来解释 Staters 的内容；
+1.快速进行开发
+2.没有了web.xml的设置，简化了配置
+3.使用注解进行开发
+4.无需外置容器，没有tomcat，而使用内嵌的servlet容器
+5.pom中一些依赖不用写版本号，它会根据父自动导入对应的版本
+starters 中就是提供的jdbc、redis、security、web 等等，预先打包了这些依赖项，不需要再担心这些依赖项和它们的兼容版本。例如web包就包含了SpringMVC的组件，使用起来就会更为灵活
+
+	Mybatis传参中，#{*}、${*}的区别？
+#{*}相当于一个占位符，而${*}用于排序的时候相当于字符串的拼接
+
+	简述Restful规则？
+书写规则：
+1.URI路径中全都使用小写字母；
+2.正斜杠分隔符（/）必须用来指示层级关系
+3.URI结尾不应包含（/）；
+4.应使用连字符（ - ）来提高URI的可读性；
+5.不得在URI中使用下划线（_）；
+命名规则:
+单资源 URL中不要Get、Update等字样，通过请求类型控制,单资源带id,复数资源加s，复数资源查找加问号带属性值。
+
+	简述Git使用流程，写几个常用Git命令？
+先在git上创建一个仓库，复制链接，在一个文件中使用命令克隆下来，把idea项目创建到该文件夹下，该项目就被git管理，然后进行提交，提交到git上
+常用的命令：git clone 网址
+                     git add  文件名/.
+ 	    git commit -m '新添加的文件内容描述'
+	    git push origin master
+
+	简述shiro两大功能实现流程；
+身份验证过程
+	用户登录-包装令牌-subject 调用 realm，包装身份验证器-身份验证器和令牌做比对（主要是比对用户名和密码）
+资源授权流程
+	用户登录-subject调用 checkroles（）- 跳转页面-当页面有 shiro 标签 或者方法上有 shiro 注解时候调用 realm 里面的资源授权器-资源授权器和标签或注解上的内容做比对
+		
+		
+		
+四、编程题（每题10分，共20分）
+	1、提供一个接口，返回 List<User> 列表，对该列表进行排序、保留10条数据；页面端使用 ajax post 方式提交请求，包装查询参数，获取接口返回数据，并遍历数据渲染到页面上 table 表格中；
+	
+	2、设计一套购物车接口，以 Cookie 或者 redis 实现

@@ -3,13 +3,17 @@ package com.sfac.springcloud.springCloudClientAccount.modules.account.service.im
 import com.github.pagehelper.PageHelper;
 
 import com.github.pagehelper.PageInfo;
-import com.netflix.discovery.converters.Auto;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import com.sfac.springcloud.springCloudClientAccount.modules.account.dao.UserDao;
 import com.sfac.springcloud.springCloudClientAccount.modules.account.entity.City;
 import com.sfac.springcloud.springCloudClientAccount.modules.account.entity.User;
+import com.sfac.springcloud.springCloudClientAccount.modules.account.service.TestFeignClient;
 import com.sfac.springcloud.springCloudClientAccount.modules.account.service.userServcie;
 import com.sfac.springcloud.springCloudClientAccount.modules.common.vo.Result;
 import com.sfac.springcloud.springCloudClientAccount.modules.common.vo.SearchVo;
+
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,10 @@ public class userServiceImpl implements userServcie {
     private UserDao userDao;
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private TestFeignClient testFeignClient;
+
     @Override
     @Transactional
     public Result<User> insertUser(User user) {
@@ -142,15 +148,23 @@ public class userServiceImpl implements userServcie {
 
     //这个方法能调用另外一个微服务的api/cities/{countryId}查询方法
     @Override
+    @HystrixCommand(fallbackMethod="getUserByUserIdFallbackMethod")
     public User getUserByUserId(int userId) {
         User user=userDao.getUserByUserId(userId);
         //响应的类型：List.class，522为给它的可变参数countryId
-        List<City> cities = Optional
+       /* List<City> cities = Optional
                 .ofNullable(restTemplate.getForObject(
                         "http://CLIENT-TEST/api/cities/{countryId}",
                         List.class, 522))
-                .orElse(Collections.emptyList());
+                .orElse(Collections.emptyList());*/
+       List<City> cities=testFeignClient.getCitiesByCountryId(522);
         user.setCities(cities);
+        return user;
+    }
+
+    public User getUserByUserIdFallbackMethod(int userId) {
+        User user=userDao.getUserByUserId(userId);
+        user.setCities(new ArrayList<City>());
         return user;
     }
 
